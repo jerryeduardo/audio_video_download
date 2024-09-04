@@ -15,7 +15,7 @@ def get_deezer_track_info_url_audio(track_url):
     if not track_id_match:
         print("URL inválida. Não foi possível extrair o ID da faixa.")
         return {}
-
+    
     try:
         track_id = track_id_match.group(1)
         
@@ -54,7 +54,6 @@ def update_tags_for_downloaded_file_url_audio(output_path, file_path):
         
         print(f"\nPara o arquivo {file_path}:")
         track_url = input("Digite a url da música no Deezer (exemplo: https://api.deezer.com/track/2478544551 ou track/2478544551): ")
-
         info = get_deezer_track_info_url_audio(track_url)
 
         if info:
@@ -64,8 +63,8 @@ def update_tags_for_downloaded_file_url_audio(output_path, file_path):
             print(f"Arquivo renomeado para {new_file_name}")
         else:
             print("Não foi possível obter informações sobre a música.")
-            new_file_name = rename_file_audio(file_path, artist, track_title)
-            print(f"Arquivo renomeado para {new_file_name}")
+            # new_file_name = rename_file_audio(file_path, info.get('artist', ''), info.get('track_title', ''))
+            # print(f"Arquivo renomeado para {new_file_name}")
 
 def update_tags_url_audio():
     output_path = '.' # Diretório onde os arquivos serão salvos e pesquisados
