@@ -113,14 +113,23 @@ def update_mp3_tags_audio(file_path, info):
         print(f"Erro ao atualizar as tags ID3: {e}")
 
 def rename_file_audio(file_path, artist, title):
+    # Cria o novo nome do arquivo com base no artista e no título
     new_file_name = f"{artist} - {title}.mp3"
-    base, ext = os.path.splitext(new_file_name)
-    counter = 1
-    while os.path.exists(new_file_name):
-        new_file_name = f"{base} ({counter}){ext}"
-        counter += 1
-    os.rename(file_path, new_file_name)
-    return new_file_name
+    dir_name = os.path.dirname(file_path)
+    new_file_path = os.path.join(dir_name, new_file_name)
+    # Renomeia o arquivo original para o novo nome
+    os.rename(file_path, new_file_path)
+    return new_file_path
+
+# def rename_file_audio(file_path, artist, title):
+    # new_file_name = f"{artist} - {title}.mp3"
+    # base, ext = os.path.splitext(new_file_name)
+    # counter = 1
+    # while os.path.exists(new_file_name):
+        # new_file_name = f"{base} ({counter}){ext}"
+        # counter += 1
+    # os.rename(file_path, new_file_name)
+    # return new_file_name
 
 def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_path):
         if not os.path.exists(file_path):
