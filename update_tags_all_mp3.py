@@ -1,9 +1,4 @@
-import requests
-from mutagen.id3 import ID3, TIT2, TPE1, TALB, TYER, TCON, APIC
-from mutagen.id3 import ID3NoHeaderError
 import os
-from io import BytesIO
-from PIL import Image
 from update_tags_artist_tracktitle import get_deezer_track_info_audio, add_cover_art_audio, update_mp3_tags_audio, rename_file_audio
 
 DEEZER_API_BASE_URL = 'https://api.deezer.com'

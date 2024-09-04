@@ -1,10 +1,4 @@
-import yt_dlp
-import requests
-from mutagen.id3 import ID3, TIT2, TPE1, TALB, TYER, TCON, APIC
-from mutagen.id3 import ID3NoHeaderError
 import os
-from io import BytesIO
-from PIL import Image
 from download_mp3 import download_youtube_audio
 from download_playlist_mp3 import download_youtube_playlist_audio
 from update_tags_artist_tracktitle import get_deezer_track_info_audio, add_cover_art_audio, update_mp3_tags_audio, rename_file_audio

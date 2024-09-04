@@ -1,10 +1,3 @@
-import yt_dlp
-import requests
-from mutagen.id3 import ID3, TIT2, TPE1, TALB, TYER, TCON, APIC
-from mutagen.id3 import ID3NoHeaderError
-import os
-from io import BytesIO
-from PIL import Image
 from download_youdzer_mp3 import download_youdzer_audio
 from download_mp3 import download_audio
 from download_mp4 import download_video
