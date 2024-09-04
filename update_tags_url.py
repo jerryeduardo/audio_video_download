@@ -59,8 +59,6 @@ def update_tags_for_downloaded_file_url_audio(output_path, file_path):
             print(f"Arquivo renomeado para {new_file_name}")
         else:
             print("Não foi possível obter informações sobre a música.")
-            # new_file_name = rename_file_audio(file_path, info.get('artist', ''), info.get('track_title', ''))
-            # print(f"Arquivo renomeado para {new_file_name}")
 
 def update_tags_url_audio():
     output_path = '.' # Diretório onde os arquivos serão salvos e pesquisados

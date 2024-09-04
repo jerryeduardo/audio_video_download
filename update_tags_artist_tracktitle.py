@@ -121,16 +121,6 @@ def rename_file_audio(file_path, artist, title):
     os.rename(file_path, new_file_path)
     return new_file_path
 
-# def rename_file_audio(file_path, artist, title):
-    # new_file_name = f"{artist} - {title}.mp3"
-    # base, ext = os.path.splitext(new_file_name)
-    # counter = 1
-    # while os.path.exists(new_file_name):
-        # new_file_name = f"{base} ({counter}){ext}"
-        # counter += 1
-    # os.rename(file_path, new_file_name)
-    # return new_file_name
-
 def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_path):
         if not os.path.exists(file_path):
             print(f"\nO arquivo {file_path} não existe.")
