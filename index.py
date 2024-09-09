@@ -11,7 +11,7 @@ from update_tags_all_mp3 import update_tags_all_mp3_audio
 
 def main_menu():
     while True:
-        print("Menu:")
+        print("\nMenu:")
         print("1. Baixar música ou playlist do YouTube com atualização de metatags com o Deezer")
         print("2. Baixar música do YouTube")
         print("3. Baixar vídeo do YouTube")
