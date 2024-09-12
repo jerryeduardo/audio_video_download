@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=JE
 Comment=Executa o script Python
+GenericName=JE
 Exec=/home/jerry/Documentos/GitHub/audio_video_download/JE.sh
 Icon=utilities-terminal
 Terminal=true

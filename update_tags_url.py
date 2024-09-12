@@ -2,6 +2,7 @@ import requests
 import re
 import os
 from update_tags_artist_tracktitle import add_cover_art_audio, update_mp3_tags_audio, rename_file_audio
+from output_dir import output_dir_create
 
 DEEZER_API_BASE_URL = 'https://api.deezer.com'
 
@@ -43,7 +44,11 @@ def get_deezer_track_info_url_audio(track_url):
         print("Informações não encontradas.")
         return {}
 
-def update_tags_for_downloaded_file_url_audio(output_path, file_path):
+def update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extension):
+        # Faz a junção do caminho do diretório com o nome do arquivo acrescido da extensão, 
+        # incluindo uma barra no meio das variáveis para acertar o caminho
+        file_path = os.path.join(output_path, file_name_with_extension)
+
         if not os.path.exists(file_path):
             print(f"\nO arquivo {file_path} não existe.")
             return
@@ -61,13 +66,9 @@ def update_tags_for_downloaded_file_url_audio(output_path, file_path):
             print("Não foi possível obter informações sobre a música.")
 
 def update_tags_url_audio():
-    output_path = '.' # Diretório onde os arquivos serão salvos e pesquisados
-    # Cria o diretório se não existir
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
-
-    file_path = input("\nDigite o título do arquivo com a extensão .mp3: ")
-    update_tags_for_downloaded_file_url_audio(output_path, file_path)
+    output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
+    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
+    update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extension)
 
 if __name__ == "__main__":
     update_tags_url_audio()

@@ -1,6 +1,7 @@
 import yt_dlp
+from output_dir import output_dir_create
 
-def download_youtube_playlist_audio(playlist_url, output_path='.'):
+def download_youtube_playlist_audio(url, output_path):
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': f'{output_path}/%(title)s.%(ext)s',
@@ -19,7 +20,7 @@ def download_youtube_playlist_audio(playlist_url, output_path='.'):
     try:
         print("Iniciando o download da playlist...")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info_dict = ydl.extract_info(playlist_url, download=True)
+            info_dict = ydl.extract_info(url, download=True)
         titles = [entry['title'] for entry in info_dict['entries']]
         # Adiciona a extensão .mp3 ao final de cada título
         titles_with_extension = [f"{title}.mp3" for title in titles]
@@ -32,8 +33,9 @@ def download_youtube_playlist_audio(playlist_url, output_path='.'):
             return []
     
 def download_playlist_audio():
+    output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
     url = input("\nDigite a URL da playlist do YouTube: ")
-    download_youtube_playlist_audio(url)
+    download_youtube_playlist_audio(url, output_path)
 
 if __name__ == "__main__":
     download_playlist_audio()

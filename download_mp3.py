@@ -1,6 +1,7 @@
 import yt_dlp
+from output_dir import output_dir_create
 
-def download_youtube_audio(url, output_path='.'):
+def download_youtube_audio(url, output_path):
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': f'{output_path}/%(title)s.%(ext)s',
@@ -30,8 +31,9 @@ def download_youtube_audio(url, output_path='.'):
             return None
 
 def download_audio():
+    output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
     url = input("\nDigite a URL do vídeo do YouTube: ")
-    download_youtube_audio(url)
+    download_youtube_audio(url, output_path)
 
 if __name__ == "__main__":
     download_audio()

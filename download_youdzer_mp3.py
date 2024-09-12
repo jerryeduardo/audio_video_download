@@ -2,6 +2,7 @@ import os
 from download_mp3 import download_youtube_audio
 from download_playlist_mp3 import download_youtube_playlist_audio
 from update_tags_artist_tracktitle import get_deezer_track_info_audio, add_cover_art_audio, update_mp3_tags_audio, rename_file_audio
+from output_dir import output_dir_create
 
 DEEZER_API_BASE_URL = 'https://api.deezer.com'
 
@@ -12,7 +13,8 @@ def update_tags_for_downloaded_files(output_path, titles):
         if not os.path.exists(file_path):
             print(f"\nO arquivo {file_path} não existe.")
             while not os.path.exists(file_path):
-                file_path = input(f"Por favor, forneça o caminho correto para o arquivo {title}: ")
+                file_path = input(f"Por favor, forneça o título correto com a extensão .mp3 para o arquivo {title}: ")
+                file_path = os.path.join(output_path, file_path)
                 if not os.path.exists(file_path):
                     print(f"O arquivo {file_path} ainda não foi encontrado. Tente novamente.")
         
@@ -33,12 +35,8 @@ def update_tags_for_downloaded_files(output_path, titles):
             print(f"Arquivo renomeado para {new_file_name}")
 
 def download_youdzer_audio():
+    output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
     url = input("\nDigite a URL do vídeo ou playlist do YouTube: ")
-    output_path = '.'  # Diretório onde os arquivos serão salvos e pesquisados
-
-    # Cria o diretório se não existir
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
 
     # Verifica se a URL fornecida é uma playlist ou um vídeo individual
     if 'list' in url:  # Identifica URL de playlist

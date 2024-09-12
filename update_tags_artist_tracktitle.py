@@ -4,6 +4,7 @@ from mutagen.id3 import ID3NoHeaderError
 import os
 from io import BytesIO
 from PIL import Image
+from output_dir import output_dir_create
 
 DEEZER_API_BASE_URL = 'https://api.deezer.com'
 
@@ -121,7 +122,11 @@ def rename_file_audio(file_path, artist, title):
     os.rename(file_path, new_file_path)
     return new_file_path
 
-def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_path):
+def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension):
+        # Faz a junção do caminho do diretório com o nome do arquivo acrescido da extensão, 
+        # incluindo uma barra no meio das variáveis para acertar o caminho
+        file_path = os.path.join(output_path, file_name_with_extension)
+
         if not os.path.exists(file_path):
             print(f"\nO arquivo {file_path} não existe.")
             return
@@ -142,13 +147,9 @@ def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_pa
             print(f"Arquivo renomeado para {new_file_name}")
 
 def update_tags_artist_tracktitle_audio():
-    output_path = '.' # Diretório onde os arquivos serão salvos e pesquisados
-    # Cria o diretório se não existir
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
-
-    file_path = input("\nDigite o título do arquivo com a extensão .mp3: ")
-    update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_path)
+    output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
+    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
+    update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension)
 
 if __name__ == "__main__":
     update_tags_artist_tracktitle_audio()

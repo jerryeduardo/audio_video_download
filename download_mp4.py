@@ -1,10 +1,11 @@
 import yt_dlp
+from output_dir import output_dir_create
 
-def download_youtube_video(url, output_path='.'):
+def download_youtube_video(url, output_path):
     ydl_opts = {
         'format': 'bestvideo[height<=2160]+bestaudio/best',  # Baixa o melhor formato disponível
         'outtmpl': f'{output_path}/%(title)s.%(ext)s',  # Modelo de nome do arquivo
-	'merge_output_format': 'mp4',  # Mescla o vídeo e o áudio no formato mp4
+	    'merge_output_format': 'mp4',  # Mescla o vídeo e o áudio no formato mp4
     }
 
     try:
@@ -22,8 +23,9 @@ def download_youtube_video(url, output_path='.'):
             return None
 
 def download_video():
+    output_path = output_dir_create('mp4') # Diretório onde os arquivos serão salvos e pesquisados
     url = input("\nDigite a URL do vídeo do YouTube: ")
-    download_youtube_video(url)
+    download_youtube_video(url, output_path)
 
 if __name__ == "__main__":
     download_video()
