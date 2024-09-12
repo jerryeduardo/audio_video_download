@@ -2,8 +2,8 @@
 Name=YouDzer
 Comment=Baixe músicas e vídeos, e atualize os metadados da sua coleção
 GenericName=YouDzer
-Exec=/home/jerry/Documentos/GitHub/audio_video_download/JE.sh
-Icon=/home/jerry/Documentos/GitHub/audio_video_download/icons/512x512/youdzer.svg
+Exec=/home/jerry/Documentos/GitHub/youdzer/youdzer.sh
+Icon=/home/jerry/Documentos/GitHub/youdzer/icons/512x512/youdzer.svg
 Terminal=true
 Type=Application
 Categories=Audio;Video;AudioVideo;AudioVideoEditing;
