@@ -53,7 +53,7 @@ def get_mp4_info(output_path, file_name_with_extension):
 
 def verify_video():
     output_path = output_dir_create('mp4') # Diretório onde os arquivos serão salvos e pesquisados
-    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .MP4: ")
+    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp4: ")
     get_mp4_info(output_path, file_name_with_extension)
 
 if __name__ == "__main__":
