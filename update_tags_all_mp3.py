@@ -1,5 +1,5 @@
 import os
-from update_tags_artist_tracktitle import get_deezer_track_info_audio, add_cover_art_audio, update_mp3_tags_audio, rename_file_audio
+from update_tags_artist_tracktitle import get_deezer_track_info_audio, add_cover_art_audio, update_mp3_tags_audio, rename_file_audio, subtract_string
 from output_dir import output_dir_create
 
 DEEZER_API_BASE_URL = 'https://api.deezer.com'
@@ -25,11 +25,11 @@ def update_tags_for_downloaded_file_all_mp3_audio(output_path):
             update_mp3_tags_audio(file_path, info)
             add_cover_art_audio(file_path, info.get('cover_url'))
             new_file_name = rename_file_audio(file_path, info.get('artist', ''), info.get('title', ''))
-            print(f"Arquivo renomeado para {new_file_name}")
+            print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print(f"Não foi possível obter informações sobre a música.")
             new_file_name = rename_file_audio(file_path, artist, track_title)
-            print(f"Arquivo renomeado para {new_file_name}")
+            print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
 
 def update_tags_all_mp3_audio():
     output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados

@@ -1,6 +1,12 @@
 import subprocess
+import os
+from output_dir import output_dir_create
 
-def get_mp4_info(file_path):
+def get_mp4_info(output_path, file_name_with_extension):
+    # Faz a junção do caminho do diretório com o nome do arquivo acrescido da extensão, 
+    # incluindo uma barra no meio das variáveis para acertar o caminho
+    file_path = os.path.join(output_path, file_name_with_extension)
+
     try:
         # Executa o comando ffprobe para obter largura, altura e bitrate do vídeo
         result = subprocess.run(
@@ -10,7 +16,7 @@ def get_mp4_info(file_path):
         
         # Captura a saída do comando
         output = result.stdout.strip().split('\n')
-        
+
         if len(output) >= 3:
             width = int(output[0])
             height = int(output[1])
@@ -46,8 +52,9 @@ def get_mp4_info(file_path):
         print(f"Erro ao executar o ffprobe: {e}")
 
 def verify_video():
-    file_path = input("\nDigite o caminho do arquivo MP4: ")
-    get_mp4_info(file_path)
+    output_path = output_dir_create('mp4') # Diretório onde os arquivos serão salvos e pesquisados
+    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .MP4: ")
+    get_mp4_info(output_path, file_name_with_extension)
 
 if __name__ == "__main__":
     verify_video()

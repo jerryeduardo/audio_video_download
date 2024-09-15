@@ -83,14 +83,14 @@ def add_cover_art_audio(file_path, cover_url):
         )
 
         audio.save()
-        print(f"Capa do álbum adicionada com sucesso para {file_path}.")
+        print(f"Capa do álbum adicionada com sucesso para {subtract_string(file_path)}")
     except Exception as e:
         print(f"Erro ao adicionar a capa: {e}")
 
 def update_mp3_tags_audio(file_path, info):
     try:
         if not os.path.exists(file_path):
-            print(f"O arquivo {file_path} não existe.")
+            print(f"O arquivo {subtract_string(file_path)} não existe.")
             return
 
         try:
@@ -109,7 +109,7 @@ def update_mp3_tags_audio(file_path, info):
         audio[TCON] = TCON(encoding=3, text=info.get('genre', ''))
 
         audio.save()
-        print(f"Tags ID3 do arquivo {file_path} atualizadas com sucesso.")
+        print(f"Tags ID3 do arquivo {subtract_string(file_path)} atualizadas com sucesso.")
     except Exception as e:
         print(f"Erro ao atualizar as tags ID3: {e}")
 
@@ -122,16 +122,21 @@ def rename_file_audio(file_path, artist, title):
     os.rename(file_path, new_file_path)
     return new_file_path
 
+def subtract_string(file_path):
+    substring_to_remove = "/home/jerry/Documentos/GitHub/youdzer/mp3/"
+    new_string = file_path.replace(substring_to_remove, "")
+    return new_string
+    
 def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension):
         # Faz a junção do caminho do diretório com o nome do arquivo acrescido da extensão, 
         # incluindo uma barra no meio das variáveis para acertar o caminho
         file_path = os.path.join(output_path, file_name_with_extension)
 
         if not os.path.exists(file_path):
-            print(f"\nO arquivo {file_path} não existe.")
+            print(f"\nO arquivo {subtract_string(file_path)} não existe.")
             return
         
-        print(f"\nPara o arquivo {file_path}:")
+        print(f"\nPara o arquivo {subtract_string(file_path)}:")
         artist = input("Digite o nome do artista: ")
         track_title = input("Digite o título da música: ")
         info = get_deezer_track_info_audio(artist, track_title)
@@ -140,11 +145,11 @@ def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_na
             update_mp3_tags_audio(file_path, info)
             add_cover_art_audio(file_path, info.get('cover_url'))
             new_file_name = rename_file_audio(file_path, info.get('artist', ''), info.get('title', ''))
-            print(f"Arquivo renomeado para {new_file_name}")
+            print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print("Não foi possível obter informações sobre a música.")
             new_file_name = rename_file_audio(file_path, artist, track_title)
-            print(f"Arquivo renomeado para {new_file_name}")
+            print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
 
 def update_tags_artist_tracktitle_audio():
     output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
