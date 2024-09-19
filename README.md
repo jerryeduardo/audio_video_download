@@ -1,5 +1,5 @@
 # YouDzer
-<img align="center" src="https://github.com/jerryeduardo/youdzer/blob/main/preview.png" width="60%" height="60%" alt="image" />
+<img align="center" text-align="center;" src="https://github.com/jerryeduardo/youdzer/blob/main/preview.png" width="50%" height="50%" alt="image" />
 O <b>YouDzer</b> é uma ferramenta que simplifica o download de músicas e vídeos do YouTube. Além disso, oferece verificação da qualidade dos arquivos baixados e permite a atualização dos metadados das músicas utilizando informações do Deezer.
 
 ## Instalação
