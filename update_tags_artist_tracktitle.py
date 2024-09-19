@@ -10,7 +10,7 @@ DEEZER_API_BASE_URL = 'https://api.deezer.com'
 
 def get_deezer_track_info_audio(artist, title):
     search_url = f'{DEEZER_API_BASE_URL}/search'
-    params = {'q': f'{artist} {title}', 'limit': 1}
+    params = {'q': f'{artist} {title}', 'limit': 3}
     response = requests.get(search_url, params=params)
     
     if response.status_code != 200:
@@ -18,38 +18,68 @@ def get_deezer_track_info_audio(artist, title):
         return {}
 
     data = response.json()
+    info = []
 
     try:
-        track = data['data'][0]
-        track_id = track['id']
+        for track in data.get('data', []):
+            track_id = track['id']
         
-        # Buscar detalhes da faixa
-        track_detail_url = f'{DEEZER_API_BASE_URL}/track/{track_id}'
-        response = requests.get(track_detail_url)
+            # Buscar detalhes da faixa
+            track_detail_url = f'{DEEZER_API_BASE_URL}/track/{track_id}'
+            response = requests.get(track_detail_url)
 
-        if response.status_code != 200:
-            print(f"Erro ao buscar detalhes da faixa: {response.status_code}")
-            return {}
+            if response.status_code != 200:
+                print(f"Erro ao buscar detalhes da faixa: {response.status_code}")
+                return {}
 
-        track_detail = response.json()
-        
-        # Obter informações detalhadas
-        album = track_detail['album']['title']
-        genre = track_detail['album'].get('genre', {}).get('name', '')
-        release_date = track_detail['album'].get('release_date', '').split('-')[0]
-        cover_url = track_detail['album'].get('cover_xl', '')
+            track_detail = response.json()
+            
+            # Obter informações detalhadas
+            album = track_detail['album']['title']
+            genre = track_detail['album'].get('genre', {}).get('name', '')
+            release_date = track_detail['album'].get('release_date', '').split('-')[0]
+            cover_url = track_detail['album'].get('cover_xl', '')
+            collaborators = [artist['name'] for artist in track_detail.get('contributors', [])]
+            contributors = ', '.join(collaborators)
 
-        return {
-            'album': album,
-            'artist': track_detail['artist']['name'],
-            'title': track_detail['title'],
-            'genre': genre,
-            'year': release_date,
-            'cover_url': cover_url
-        }
+            info.append({
+                'album': album,
+                'artist': track_detail['artist']['name'],
+                'title': track_detail['title'],
+                'genre': genre,
+                'year': release_date,
+                'cover_url': cover_url,
+                'contributors': contributors
+            })
+        return info
     except (KeyError, IndexError):
         print("Informações não encontradas.")
-        return {}
+        return []
+
+def display_info(info):
+    print("\nResultados encontrados:")
+    for idx, result in enumerate(info):
+        print(f"{idx + 1}:")
+        print(f"  Artista: {result['artist']}")    
+        print(f"  Título: {result['title']}")
+        print(f"  Álbum: {result['album']}")
+        print(f"  Ano: {result['year']}")
+        print(f"  Colaboradores: {result['contributors']}")
+        print()
+
+    print("Digite 0 se você deseja manter o arquivo como está.")
+
+    while True:
+        try:
+            choice = int(input("Escolha o número do resultado que deseja usar: "))
+            if choice == 0:
+                return None  # Retorna None se o usuário optar por não fazer alterações
+            elif 1 <= choice <= len(info):
+                return info[choice - 1]
+            else:
+                print("\nNúmero inválido. Tente novamente.")
+        except ValueError:
+            print("\nEntrada inválida. Digite um número.")
 
 def add_cover_art_audio(file_path, cover_url):
     if not cover_url:
@@ -123,10 +153,14 @@ def rename_file_audio(file_path, artist, title):
     return new_file_path
 
 def subtract_string(file_path):
-    substring_to_remove = "/home/jerry/Documentos/GitHub/youdzer/mp3/"
+    home_dir = os.environ['HOME']
+    substring_to_remove = f"{home_dir}/youdzer/mp3/"
     new_string = file_path.replace(substring_to_remove, "")
     return new_string
     
+def is_valid_directory(path):
+    return os.path.isdir(path)
+
 def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension):
         # Faz a junção do caminho do diretório com o nome do arquivo acrescido da extensão, 
         # incluindo uma barra no meio das variáveis para acertar o caminho
@@ -136,25 +170,43 @@ def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_na
             print(f"\nO arquivo {subtract_string(file_path)} não existe.")
             return
         
-        print(f"\nPara o arquivo {subtract_string(file_path)}:")
+        print(f"\nPara o arquivo {subtract_string(file_path)}")
         artist = input("Digite o nome do artista: ")
         track_title = input("Digite o título da música: ")
         info = get_deezer_track_info_audio(artist, track_title)
 
         if info:
-            update_mp3_tags_audio(file_path, info)
-            add_cover_art_audio(file_path, info.get('cover_url'))
-            new_file_name = rename_file_audio(file_path, info.get('artist', ''), info.get('title', ''))
-            print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
+            selected_info = display_info(info)
+            if selected_info is None:
+                print("\nConforme solicitado, o arquivo foi mantido como está.")
+            else:
+                update_mp3_tags_audio(file_path, selected_info)
+                add_cover_art_audio(file_path, selected_info.get('cover_url'))
+                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''))
+                print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print("Não foi possível obter informações sobre a música.")
             new_file_name = rename_file_audio(file_path, artist, track_title)
             print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
 
 def update_tags_artist_tracktitle_audio():
-    output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
-    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
-    update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension)
+    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 'S' para Sim ou 'N' para Não): ").upper()
+    if choice == 'S':
+        output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
+        file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
+        update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension)
+    elif choice == 'N':
+        output_path= input("\nInforme o caminho do diretório onde está o arquivo MP3 (exemplo: /home/seuusuario/Downloads/): ")
+        if not is_valid_directory(output_path):
+            print(f"\nO caminho informado para o diretório é inválido.")
+            while not is_valid_directory(output_path):
+                output_path = input(f"Por favor, informe o caminho válido para o diretório: ")
+                if not is_valid_directory(output_path):
+                    print(f"\nO diretório informado ainda é inválido.")  
+        file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
+        update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension)
+    else: 
+        print("\nVocê inseriu uma informação incorreta. Por favor, acesse a opção 9 do menu e tente novamente.")
 
 if __name__ == "__main__":
     update_tags_artist_tracktitle_audio()

@@ -1,7 +1,7 @@
 import requests
 import re
 import os
-from update_tags_artist_tracktitle import add_cover_art_audio, update_mp3_tags_audio, rename_file_audio, subtract_string
+from update_tags_artist_tracktitle import add_cover_art_audio, update_mp3_tags_audio, rename_file_audio, subtract_string, is_valid_directory
 from output_dir import output_dir_create
 
 DEEZER_API_BASE_URL = 'https://api.deezer.com'
@@ -53,8 +53,8 @@ def update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extens
             print(f"\nO arquivo {subtract_string(file_path)} não existe.")
             return
         
-        print(f"\nPara o arquivo {subtract_string(file_path)}:")
-        track_url = input("Digite a url da música no Deezer (exemplo: https://api.deezer.com/track/2478544551 ou track/2478544551): ")
+        print(f"\nPara o arquivo {subtract_string(file_path)}")
+        track_url = input("Digite a URL da música no Deezer (exemplo: https://api.deezer.com/track/2478544551 ou track/2478544551): ")
         info = get_deezer_track_info_url_audio(track_url)
 
         if info:
@@ -66,9 +66,23 @@ def update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extens
             print("Não foi possível obter informações sobre a música.")
 
 def update_tags_url_audio():
-    output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
-    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
-    update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extension)
+    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 'S' para Sim ou 'N' para Não): ").upper()
+    if choice == 'S':
+        output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
+        file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
+        update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extension)
+    elif choice == 'N':
+        output_path= input("\nInforme o caminho do diretório onde está o arquivo MP3 (exemplo: /home/seuusuario/Downloads/): ")
+        if not is_valid_directory(output_path):
+            print(f"\nO caminho informado para o diretório é inválido.")
+            while not is_valid_directory(output_path):
+                output_path = input(f"Por favor, informe o caminho válido para o diretório: ")
+                if not is_valid_directory(output_path):
+                    print(f"\nO diretório informado ainda é inválido.")  
+        file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
+        update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extension)
+    else: 
+        print("\nVocê inseriu uma informação incorreta. Por favor, acesse a opção 8 do menu e tente novamente.")
 
 if __name__ == "__main__":
     update_tags_url_audio()

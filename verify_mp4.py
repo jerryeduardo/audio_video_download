@@ -1,5 +1,6 @@
 import subprocess
 import os
+from update_tags_artist_tracktitle import subtract_string, is_valid_directory
 from output_dir import output_dir_create
 
 def get_mp4_info(output_path, file_name_with_extension):
@@ -46,15 +47,29 @@ def get_mp4_info(output_path, file_name_with_extension):
             print(f"Resolução do vídeo: {width}x{height} ({resolution})")
             print(f"Taxa de bits: {bit_rate_kbps / 1000:.2f} Mbps")
         else:
-            print("Não foi possível obter as informações do arquivo.")
+            print(f"\nO arquivo {(file_name_with_extension)} não existe.")
     
     except Exception as e:
         print(f"Erro ao executar o ffprobe: {e}")
 
 def verify_video():
-    output_path = output_dir_create('mp4') # Diretório onde os arquivos serão salvos e pesquisados
-    file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp4: ")
-    get_mp4_info(output_path, file_name_with_extension)
+    choice = input("\nVocê deseja verificar a qualidade de um arquivo MP4 do diretório padrão? (Responda com 'S' para Sim ou 'N' para Não): ").upper()
+    if choice == 'S':
+        output_path = output_dir_create('mp4') # Diretório onde os arquivos serão salvos e pesquisados
+        file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp4: ")
+        get_mp4_info(output_path, file_name_with_extension)
+    elif choice == 'N':
+        output_path = input("\nInforme o caminho do diretório onde está o arquivo MP4 (exemplo: /home/seuusuario/Downloads/): ")
+        if not is_valid_directory(output_path):
+            print(f"\nO caminho informado para o diretório é inválido.")
+            while not is_valid_directory(output_path):
+                output_path = input(f"Por favor, informe o caminho válido para o diretório: ")
+                if not is_valid_directory(output_path):
+                    print(f"\nO diretório informado ainda é inválido.")  
+        file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp4: ")
+        get_mp4_info(output_path, file_name_with_extension)
+    else: 
+        print("\nVocê inseriu uma informação incorreta. Por favor, acesse a opção 7 do menu e tente novamente.")
 
 if __name__ == "__main__":
     verify_video()

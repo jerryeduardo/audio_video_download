@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define o nome da pasta do usuário e o nome do ambiente virtual do python
-USER_FOLDER="jerry"
-VIRTUAL_ENV="jerry"
+PYTHON_DESTINATION_DIR=""$HOME"/youdzer/"
+VIRTUAL_ENV="yd-env/bin/activate"
 
-source /home/"$USER_FOLDER"/"$VIRTUAL_ENV"/bin/activate
-python /home/"$USER_FOLDER"/Documentos/GitHub/youdzer/index.py
+source "$PYTHON_DESTINATION_DIR""$VIRTUAL_ENV"
+python "$PYTHON_DESTINATION_DIR"index.py

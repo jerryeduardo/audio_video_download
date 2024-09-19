@@ -2,7 +2,9 @@
 <p align="center">
     <img src="https://github.com/jerryeduardo/youdzer/blob/main/preview.png" width="50%" height="50%" alt="image" />
 </p>
-O <b>YouDzer</b> é uma ferramenta que simplifica o download de músicas e vídeos do YouTube. Além disso, oferece verificação da qualidade dos arquivos baixados e permite a atualização dos metadados das músicas utilizando informações do Deezer.
+<p>
+    O <b>YouDzer</b> é uma ferramenta que simplifica o download de músicas e vídeos do YouTube. Além disso, oferece verificação da qualidade dos arquivos baixados e permite a atualização dos metadados das músicas utilizando informações do Deezer.
+</p>
 
 ## Instalação
 Primeiramente, se o pacote Git não estiver instalado, inicie o processo de instalação:
@@ -22,7 +24,7 @@ Instale o Python 3 e suas dependências (pip e venv) com:
 ```
 ./install_python3_ffmpeg.sh
 ```
-Em seguida, crie o ambiente virtual do Python 3, instale as bibliotecas necessárias e adicione os arquivos com:
+Em seguida, crie o ambiente virtual do Python 3, instale as bibliotecas necessárias e os arquivos com:
 ```
 ./install_venv_libs_files.sh
 ```
