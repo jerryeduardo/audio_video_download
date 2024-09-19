@@ -12,9 +12,7 @@ SOURCE_DIR="$(dirname "$0")"
 
 echo "Iniciando a criação do ambiente virtual do Python 3 e a instalação das bibliotecas necessárias..."
 sleep 1  # Espera meio segundo
-echo "$PYTHON_DESTINATION_DIR"
 mkdir -p "$PYTHON_DESTINATION_DIR"
-sleep 20
 python3 -m venv "$PYTHON_DESTINATION_DIR"yd-env
 echo "O ambiente virtual 'yd-env' criado no diretório $PYTHON_DESTINATION_DIR"
 
