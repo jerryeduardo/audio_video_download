@@ -9,11 +9,11 @@
 ## Instalação
 Primeiramente, se o pacote Git não estiver instalado, inicie o processo de instalação:
 ```
-sudo apt install git
+sudo apt install -y git
 ```
 Agora clone este repositório:
 ```
-cd ~/Downloads
+cd ~/Downloads/
 git clone https://github.com/jerryeduardo/youdzer
 ```
 Então vá para o diretório youdzer:
