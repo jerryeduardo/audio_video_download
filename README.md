@@ -1,5 +1,5 @@
 # YouDzer
-<img align="right" src="https://github.com/jerryeduardo/youdzer/blob/main/preview.png" alt="image" />
+<img align="right" src="https://github.com/jerryeduardo/youdzer/blob/main/preview.png" width="40%" height="40%" alt="image" />
 O <b>YouDzer</b> é uma ferramenta que simplifica o download de músicas e vídeos do YouTube. Além disso, oferece verificação da qualidade dos arquivos baixados e permite a atualização dos metadados das músicas utilizando informações do Deezer.
 
 ## Instalação
@@ -27,7 +27,7 @@ Em seguida, crie o ambiente virtual do Python 3, instale as bibliotecas necessá
 Agora você pode usar o YouDzer em seu sistema acessando o menu de aplicativos e clicando no ícone do YouDzer.
 
 ## Desinstalação
-Se desejar desinstalar o YouDzer, você pode fazê-lo executando o arquivo remove_venv_libs_files.sh com:
+Se desejar desinstalar o YouDzer, você pode fazê-lo executando o arquivo uninstall_venv_libs_files.sh com:
 ```
 ./uninstall_venv_libs_files.sh
 ```
