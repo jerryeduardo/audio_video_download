@@ -12,6 +12,9 @@ SOURCE_DIR="$(dirname "$0")"
 
 echo "Iniciando a criação do ambiente virtual do Python 3 e a instalação das bibliotecas necessárias..."
 sleep 1  # Espera meio segundo
+echo "$PYTHON_DESTINATION_DIR"
+mkdir -p "$PYTHON_DESTINATION_DIR"
+sleep 20
 python3 -m venv "$PYTHON_DESTINATION_DIR"yd-env
 echo "O ambiente virtual 'yd-env' criado no diretório $PYTHON_DESTINATION_DIR"
 
@@ -24,7 +27,6 @@ echo "Criação do ambiente virtual e a instalação das bibliotecas concluída 
 
 echo "Iniciando a instalação dos arquivos..."
 sleep 1  # Espera 1 segundo
-mkdir -p /"$HOME"/youdzer/
 cp *.py "$PYTHON_DESTINATION_DIR"
 echo "Todos os arquivos .py foram copiados para $PYTHON_DESTINATION_DIR"
 
@@ -34,8 +36,8 @@ sudo cp "$BASH_FILE" "$BASH_DESTINATION_DIR"
 echo "O arquivo bash do programa foi copiado para $BASH_DESTINATION_DIR"
 
 sleep 0.5  # Espera meio segundo
-sudo mkdir -p "$PYTHON_DESTINATION_DIR/mp3"
-sudo mkdir -p "$PYTHON_DESTINATION_DIR/mp4"
+mkdir -p "$PYTHON_DESTINATION_DIR/mp3"
+mkdir -p "$PYTHON_DESTINATION_DIR/mp4"
 echo "Os diretórios mp3 e mp4 foram criados em $PYTHON_DESTINATION_DIR"
 
 sleep 0.5  # Espera meio segundo
@@ -44,7 +46,7 @@ sudo cp "$ICON_FILE" "$ICON_DESTINATION_DIR"
 echo "O ícone do programa foi copiado para $ICON_DESTINATION_DIR"
 
 sleep 0.5  # Espera meio segundo
-sudo cp "$DESKTOP_FILE" "$DESKTOP_DESTINATION_DIR"
+cp "$DESKTOP_FILE" "$DESKTOP_DESTINATION_DIR"
 echo "O arquivo executável do programa e foi copiado para $DESKTOP_DESTINATION_DIR"
 
 echo "Instalação dos arquivos concluída com sucesso."
