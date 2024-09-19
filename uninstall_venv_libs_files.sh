@@ -7,21 +7,11 @@ ICON_DESTINATION_DIR="/usr/share/icons/youdzer/"
 DESKTOP_DESTINATION_DIR=""$HOME"/.local/share/applications/"
 SOURCE_DIR="$(dirname "$0")"
 
-echo ""
+echo "Iniciando a desinstalação do ambiente virtual do Python 3, bem como das bibliotecas e arquivos (.py, mp3, mp4, ícone e executáveis)..."
 sleep 1  # Espera meio segundo
 sudo rm -rf "$PYTHON_DESTINATION_DIR"
-echo ""
-
-sleep 0.5  # Espera meio segundo
 sudo rm -rf "$BASH_DESTINATION_DIR"
-echo ""
-
-sleep 0.5  # Espera meio segundo
 sudo rm -rf "$ICON_DESTINATION_DIR"
-echo ""
-
-sleep 0.5  # Espera meio segundo
 sudo rm "$DESKTOP_DESTINATION_DIR""$DESKTOP_FILE"
-echo ""
 
-echo ""
+echo "Desinstação concluída com sucesso."
