@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Função para verificar se o Python 3 está instalado
+# Função para verificar se o Python 3 e suas dependências, bem como o ffmpeg estão instalados
 check_python() {
     # Verifica se o Python 3 está instalado
     if ! command -v python3 &> /dev/null; then
@@ -35,6 +35,6 @@ check_python() {
     fi
 }
 
-echo "Verificando se o Python 3 e suas dependências estão instalados. Se não estiverem, a instalação será iniciada..."
+echo "Verificando se o Python 3 e suas dependências, bem como o ffmpeg, estão instalados. Se não estiverem, a instalação será iniciada..."
 sleep 1  # Espera 1 segundo
 check_python

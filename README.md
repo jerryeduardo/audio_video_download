@@ -20,7 +20,7 @@ Então vá para o diretório youdzer:
 ```
 cd ~/Downloads/youdzer/
 ```
-Instale o Python 3 e suas dependências (pip e venv) com:
+Instale o Python 3 e suas dependências (pip e venv), bem como o ffmpeg, com:
 ```
 ./install_python3_ffmpeg.sh
 ```
