@@ -24,9 +24,9 @@ Em seguida, crie o ambiente virtual do Python 3, instale as bibliotecas necessá
 ```
 ./install_venv_libs_files.sh
 ```
-Agora você pode usar o YouDzer em seu sistema acessando o menu de aplicativos e clicando no ícone do YouDzer.
-```
 Se desejar remover o YouDzer, você pode fazê-lo executando o arquivo remove_venv_libs_files.sh com:
 ```
 ./remove_venv_libs_files.sh
+```
+Agora você pode usar o YouDzer em seu sistema acessando o menu de aplicativos e clicando no ícone do YouDzer.
 ```
