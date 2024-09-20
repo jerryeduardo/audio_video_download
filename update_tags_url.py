@@ -27,18 +27,33 @@ def get_deezer_track_info_url_audio(track_url):
         track_detail = response.json()
         
         # Obter informações detalhadas
+        album_id = track_detail['album']['id']
         album = track_detail['album']['title']
         genre = track_detail['album'].get('genre', {}).get('name', '')
         release_date = track_detail['album'].get('release_date', '').split('-')[0]
         cover_url = track_detail['album'].get('cover_xl', '')
 
+        # Buscar todas as faixas do álbum
+        album_tracks_url = f'{DEEZER_API_BASE_URL}/album/{album_id}/tracks'
+        response = requests.get(album_tracks_url)
+
+        if response.status_code != 200:
+            print(f"Erro ao buscar faixas do álbum: {response.status_code}")
+            return {}
+
+        album_tracks = response.json()['data']
+        
+        # Encontrar o número da faixa
+        track_number = next((i + 1 for i, t in enumerate(album_tracks) if str(t['id']) == track_id), None)
+        
         return {
             'album': album,
             'artist': track_detail['artist']['name'],
             'title': track_detail['title'],
             'genre': genre,
             'year': release_date,
-            'cover_url': cover_url
+            'cover_url': cover_url,
+            'track_number': track_number
         }
     except (KeyError, IndexError):
         print("Informações não encontradas.")

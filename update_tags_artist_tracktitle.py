@@ -1,5 +1,5 @@
 import requests
-from mutagen.id3 import ID3, TIT2, TPE1, TALB, TYER, TCON, APIC
+from mutagen.id3 import ID3, TIT2, TPE1, TALB, TYER, TCON, APIC, TRCK
 from mutagen.id3 import ID3NoHeaderError
 import os
 from io import BytesIO
@@ -35,12 +35,26 @@ def get_deezer_track_info_audio(artist, title):
             track_detail = response.json()
             
             # Obter informações detalhadas
+            album_id = track_detail['album']['id']
             album = track_detail['album']['title']
             genre = track_detail['album'].get('genre', {}).get('name', '')
             release_date = track_detail['album'].get('release_date', '').split('-')[0]
             cover_url = track_detail['album'].get('cover_xl', '')
             collaborators = [artist['name'] for artist in track_detail.get('contributors', [])]
             contributors = ', '.join(collaborators)
+
+            # Buscar todas as faixas do álbum
+            album_tracks_url = f'{DEEZER_API_BASE_URL}/album/{album_id}/tracks'
+            response = requests.get(album_tracks_url)
+
+            if response.status_code != 200:
+                print(f"Erro ao buscar faixas do álbum: {response.status_code}")
+                return {}
+
+            album_tracks = response.json()['data']
+        
+            # Encontrar o número da faixa
+            track_number = next((i + 1 for i, t in enumerate(album_tracks) if t['id'] == track_id), None)
 
             info.append({
                 'album': album,
@@ -49,7 +63,8 @@ def get_deezer_track_info_audio(artist, title):
                 'genre': genre,
                 'year': release_date,
                 'cover_url': cover_url,
-                'contributors': contributors
+                'contributors': contributors,
+                'track_number': track_number
             })
         return info
     except (KeyError, IndexError):
@@ -63,6 +78,7 @@ def display_info(info):
         print(f"  Artista: {result['artist']}")    
         print(f"  Título: {result['title']}")
         print(f"  Álbum: {result['album']}")
+        print(f"  Faixa: {result['track_number']}")
         print(f"  Ano: {result['year']}")
         print(f"  Colaboradores: {result['contributors']}")
         print()
@@ -137,6 +153,7 @@ def update_mp3_tags_audio(file_path, info):
         audio[TALB] = TALB(encoding=3, text=info.get('album', ''))
         audio[TYER] = TYER(encoding=3, text=info.get('year', ''))
         audio[TCON] = TCON(encoding=3, text=info.get('genre', ''))
+        audio[TRCK] = TRCK(encoding=3, text=str(info.get('track_number', '')))
 
         audio.save()
         print(f"Tags ID3 do arquivo {subtract_string(file_path)} atualizadas com sucesso.")

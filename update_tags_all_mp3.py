@@ -23,12 +23,15 @@ def update_tags_for_downloaded_file_all_mp3_audio(output_path):
             
         if info:
             selected_info = display_info(info)
-            update_mp3_tags_audio(file_path, selected_info)
-            add_cover_art_audio(file_path, selected_info.get('cover_url'))
-            new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''))
-            print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
+            if selected_info is None:
+                print("\nConforme solicitado, o arquivo foi mantido como está.")
+            else:
+                update_mp3_tags_audio(file_path, selected_info)
+                add_cover_art_audio(file_path, selected_info.get('cover_url'))
+                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''))
+                print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
-            print(f"Não foi possível obter informações sobre a música.")
+            print("Não foi possível obter informações sobre a música.")
             new_file_name = rename_file_audio(file_path, artist, track_title)
             print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
 
