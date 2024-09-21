@@ -52,7 +52,7 @@ def get_deezer_track_info_audio(artist, title):
                 return {}
 
             album_tracks = response.json()['data']
-        
+
             # Encontrar o número da faixa
             track_number = next((i + 1 for i, t in enumerate(album_tracks) if t['id'] == track_id), None)
 
@@ -64,7 +64,8 @@ def get_deezer_track_info_audio(artist, title):
                 'year': release_date,
                 'cover_url': cover_url,
                 'contributors': contributors,
-                'track_number': track_number
+                'track_number': track_number,
+                'album_tracks': album_tracks
             })
         return info
     except (KeyError, IndexError):
@@ -160,13 +161,21 @@ def update_mp3_tags_audio(file_path, info):
     except Exception as e:
         print(f"Erro ao atualizar as tags ID3: {e}")
 
-def rename_file_audio(file_path, artist, title):
-    # Cria o novo nome do arquivo com base no artista e no título
-    new_file_name = f"{artist} - {title}.mp3"
-    dir_name = os.path.dirname(file_path)
-    new_file_path = os.path.join(dir_name, new_file_name)
-    # Renomeia o arquivo original para o novo nome
-    os.rename(file_path, new_file_path)
+def rename_file_audio(file_path, artist, title, track_number, album_tracks):
+    if len(album_tracks) > 1:
+        # Cria o novo nome do arquivo com base no artista e no título
+        new_file_name = f"{track_number}. {artist} - {title}.mp3"
+        dir_name = os.path.dirname(file_path)
+        new_file_path = os.path.join(dir_name, new_file_name)
+        # Renomeia o arquivo original para o novo nome
+        os.rename(file_path, new_file_path)
+    else:
+        # Cria o novo nome do arquivo com base no artista e no título
+        new_file_name = f"{artist} - {title}.mp3"
+        dir_name = os.path.dirname(file_path)
+        new_file_path = os.path.join(dir_name, new_file_name)
+        # Renomeia o arquivo original para o novo nome
+        os.rename(file_path, new_file_path)
     return new_file_path
 
 def subtract_string(file_path):
@@ -199,20 +208,18 @@ def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_na
             else:
                 update_mp3_tags_audio(file_path, selected_info)
                 add_cover_art_audio(file_path, selected_info.get('cover_url'))
-                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''))
+                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''), selected_info.get('track_number', ''), selected_info.get('album_tracks', ''))
                 print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print("Não foi possível obter informações sobre a música.")
-            new_file_name = rename_file_audio(file_path, artist, track_title)
-            print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
 
 def update_tags_artist_tracktitle_audio():
-    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 'S' para Sim ou 'N' para Não): ").upper()
-    if choice == 'S':
+    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 's' para sim ou 'n' para não): ").lower()
+    if choice == 's':
         output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
         file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
         update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension)
-    elif choice == 'N':
+    elif choice == 'n':
         output_path= input("\nInforme o caminho do diretório onde está o arquivo MP3 (exemplo: /home/seuusuario/Downloads/): ")
         if not is_valid_directory(output_path):
             print(f"\nO caminho informado para o diretório é inválido.")

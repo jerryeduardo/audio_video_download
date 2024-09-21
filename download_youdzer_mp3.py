@@ -30,12 +30,10 @@ def update_tags_for_downloaded_files(output_path, titles):
             else:
                 update_mp3_tags_audio(file_path, selected_info)
                 add_cover_art_audio(file_path, selected_info.get('cover_url'))
-                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''))
+                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''), selected_info.get('track_number', ''), selected_info.get('album_tracks', ''))
                 print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print("Não foi possível obter informações sobre a música.")
-            new_file_name = rename_file_audio(file_path, artist, track_title)
-            print(f"Arquivo renomeado para {new_file_name}")
 
 def download_youdzer_audio():
     output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados

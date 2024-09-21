@@ -53,7 +53,8 @@ def get_deezer_track_info_url_audio(track_url):
             'genre': genre,
             'year': release_date,
             'cover_url': cover_url,
-            'track_number': track_number
+            'track_number': track_number,
+            'album_tracks': album_tracks
         }
     except (KeyError, IndexError):
         print("Informações não encontradas.")
@@ -75,18 +76,18 @@ def update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extens
         if info:
             update_mp3_tags_audio(file_path, info)
             add_cover_art_audio(file_path, info.get('cover_url'))
-            new_file_name = rename_file_audio(file_path, info.get('artist', ''), info.get('title', ''))
+            new_file_name = rename_file_audio(file_path, info.get('artist', ''), info.get('title', ''), info.get('track_number', ''), info.get('album_tracks', ''))
             print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print("Não foi possível obter informações sobre a música.")
 
 def update_tags_url_audio():
-    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 'S' para Sim ou 'N' para Não): ").upper()
-    if choice == 'S':
+    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 's' para sim ou 'n' para não): ").lower()
+    if choice == 's':
         output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
         file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
         update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extension)
-    elif choice == 'N':
+    elif choice == 'n':
         output_path= input("\nInforme o caminho do diretório onde está o arquivo MP3 (exemplo: /home/seuusuario/Downloads/): ")
         if not is_valid_directory(output_path):
             print(f"\nO caminho informado para o diretório é inválido.")
