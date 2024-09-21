@@ -34,7 +34,7 @@ def update_tags_for_downloaded_file_all_mp3_audio(output_path):
             print("Não foi possível obter informações sobre a música.")
 
 def update_tags_all_mp3_audio():
-    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 's' para sim ou 'n' para são): ").lower()
+    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (responda com 's' para sim ou 'n' para são): ").lower()
     if choice == 's':
         output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
         update_tags_for_downloaded_file_all_mp3_audio(output_path)

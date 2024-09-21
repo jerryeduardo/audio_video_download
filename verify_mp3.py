@@ -31,7 +31,7 @@ def get_mp3_info(output_path, file_name_with_extension):
         print(f"Erro ao executar o ffprobe: {e}")
 
 def verify_audio():
-    choice = input("\nVocê deseja verificar a qualidade de um arquivo MP3 do diretório padrão? (Responda com 's' para sim ou 'n' para não): ").lower()
+    choice = input("\nVocê deseja verificar a qualidade de um arquivo MP3 do diretório padrão? (responda com 's' para sim ou 'n' para não): ").lower()
     if choice == 's':
         output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
         file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
