@@ -40,7 +40,7 @@ def update_tags_all_mp3_audio():
         output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
         update_tags_for_downloaded_file_all_mp3_audio(output_path)
     elif choice == 'n':
-        output_path= input("\nInforme o caminho do diretório onde está os arquivos MP3 (Exemplo: /home/seuusuario/Downloads/): ")
+        output_path = input("\nInforme o caminho do diretório onde está os arquivos MP3 (Exemplo: /home/seuusuario/Downloads/): ")
         if not is_valid_directory(output_path):
             print(f"\nO caminho informado para o diretório é inválido.")
             while not is_valid_directory(output_path):

@@ -99,7 +99,7 @@ def update_tags_url_audio():
         file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
         update_tags_for_downloaded_file_url_audio(output_path, file_name_with_extension)
     elif choice == 'n':
-        output_path= input("\nInforme o caminho do diretório onde está o arquivo MP3 (Exemplo: /home/seuusuario/Downloads/): ")
+        output_path = input("\nInforme o caminho do diretório onde está o arquivo MP3 (Exemplo: /home/seuusuario/Downloads/): ")
         if not is_valid_directory(output_path):
             print(f"\nO caminho informado para o diretório é inválido.")
             while not is_valid_directory(output_path):
