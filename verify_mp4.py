@@ -53,13 +53,13 @@ def get_mp4_info(output_path, file_name_with_extension):
         print(f"Erro ao executar o ffprobe: {e}")
 
 def verify_video():
-    choice = input("\nVocê deseja verificar a qualidade de um arquivo MP4 do diretório padrão? (responda com 's' para sim ou 'n' para não): ").lower()
+    choice = input("\nVocê deseja verificar a qualidade de um arquivo MP4 do diretório padrão? (Responda com 's' para sim ou 'n' para não): ").lower()
     if choice == 's':
         output_path = output_dir_create('mp4') # Diretório onde os arquivos serão salvos e pesquisados
         file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp4: ")
         get_mp4_info(output_path, file_name_with_extension)
     elif choice == 'n':
-        output_path = input("\nInforme o caminho do diretório onde está o arquivo MP4 (exemplo: /home/seuusuario/Downloads/): ")
+        output_path = input("\nInforme o caminho do diretório onde está o arquivo MP4 (Exemplo: /home/seuusuario/Downloads/): ")
         if not is_valid_directory(output_path):
             print(f"\nO caminho informado para o diretório é inválido.")
             while not is_valid_directory(output_path):

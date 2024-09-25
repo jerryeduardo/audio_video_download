@@ -25,21 +25,22 @@ def update_tags_for_downloaded_file_all_mp3_audio(output_path):
             selected_info = display_info(info)
             if selected_info is None:
                 print("\nConforme solicitado, o arquivo foi mantido como está.")
-            else:
-                update_mp3_tags_audio(file_path, selected_info)
-                add_cover_art_audio(file_path, selected_info.get('cover_url'))
-                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''), selected_info.get('track_number', ''), selected_info.get('album_tracks', ''))
+                return
+            update_mp3_tags_audio(file_path, selected_info)
+            add_cover_art_audio(file_path, selected_info.get('cover_url'))
+            new_file_name = rename_file_audio(file_path, selected_info)
+            if new_file_name:
                 print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print("Não foi possível obter informações sobre a música.")
 
 def update_tags_all_mp3_audio():
-    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (responda com 's' para sim ou 'n' para são): ").lower()
+    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 's' para sim ou 'n' para são): ").lower()
     if choice == 's':
         output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
         update_tags_for_downloaded_file_all_mp3_audio(output_path)
     elif choice == 'n':
-        output_path= input("\nInforme o caminho do diretório onde está os arquivos MP3 (exemplo: /home/seuusuario/Downloads/): ")
+        output_path= input("\nInforme o caminho do diretório onde está os arquivos MP3 (Exemplo: /home/seuusuario/Downloads/): ")
         if not is_valid_directory(output_path):
             print(f"\nO caminho informado para o diretório é inválido.")
             while not is_valid_directory(output_path):

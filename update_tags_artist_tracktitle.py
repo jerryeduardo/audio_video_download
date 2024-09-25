@@ -37,11 +37,18 @@ def get_deezer_track_info_audio(artist, title):
             # Obter informações detalhadas
             album_id = track_detail['album']['id']
             album = track_detail['album']['title']
+            artist = track_detail['artist']['name']
+            title = track_detail['title']
             genre = track_detail['album'].get('genre', {}).get('name', '')
             release_date = track_detail['album'].get('release_date', '').split('-')[0]
             cover_url = track_detail['album'].get('cover_xl', '')
             collaborators = [artist['name'] for artist in track_detail.get('contributors', [])]
             contributors = ', '.join(collaborators)
+            collaborators_less_main = [
+                contributor['name'] for contributor in track_detail.get('contributors', [])
+                if contributor['name'] != artist
+            ]
+            contributors_less_main = ', '.join(collaborators_less_main)
 
             # Buscar todas as faixas do álbum
             album_tracks_url = f'{DEEZER_API_BASE_URL}/album/{album_id}/tracks'
@@ -58,14 +65,15 @@ def get_deezer_track_info_audio(artist, title):
 
             info.append({
                 'album': album,
-                'artist': track_detail['artist']['name'],
-                'title': track_detail['title'],
+                'artist': artist,
+                'title': title,
                 'genre': genre,
                 'year': release_date,
                 'cover_url': cover_url,
-                'contributors': contributors,
                 'track_number': track_number,
-                'album_tracks': album_tracks
+                'album_tracks': album_tracks,
+                'contributors': contributors,
+                'contributors_less_main': contributors_less_main
             })
         return info
     except (KeyError, IndexError):
@@ -134,7 +142,7 @@ def add_cover_art_audio(file_path, cover_url):
     except Exception as e:
         print(f"Erro ao adicionar a capa: {e}")
 
-def update_mp3_tags_audio(file_path, info):
+def update_mp3_tags_audio(file_path, selected_info):
     try:
         if not os.path.exists(file_path):
             print(f"O arquivo {subtract_string(file_path)} não existe.")
@@ -149,34 +157,52 @@ def update_mp3_tags_audio(file_path, info):
         for tag in list(audio.keys()):
             del audio[tag]
 
-        audio[TIT2] = TIT2(encoding=3, text=info.get('title', ''))
-        audio[TPE1] = TPE1(encoding=3, text=info.get('artist', ''))
-        audio[TALB] = TALB(encoding=3, text=info.get('album', ''))
-        audio[TYER] = TYER(encoding=3, text=info.get('year', ''))
-        audio[TCON] = TCON(encoding=3, text=info.get('genre', ''))
-        audio[TRCK] = TRCK(encoding=3, text=str(info.get('track_number', '')))
+        audio[TIT2] = TIT2(encoding=3, text=selected_info.get('title', ''))
+        audio[TPE1] = TPE1(encoding=3, text=selected_info.get('artist', ''))
+        audio[TALB] = TALB(encoding=3, text=selected_info.get('album', ''))
+        audio[TYER] = TYER(encoding=3, text=selected_info.get('year', ''))
+        audio[TCON] = TCON(encoding=3, text=selected_info.get('genre', ''))
+        audio[TRCK] = TRCK(encoding=3, text=str(selected_info.get('track_number', '')))
 
         audio.save()
         print(f"Tags ID3 do arquivo {subtract_string(file_path)} atualizadas com sucesso.")
     except Exception as e:
         print(f"Erro ao atualizar as tags ID3: {e}")
 
-def rename_file_audio(file_path, artist, title, track_number, album_tracks):
-    if len(album_tracks) > 1:
-        # Cria o novo nome do arquivo com base no artista e no título
-        new_file_name = f"{track_number}. {artist} - {title}.mp3"
+def rename_file_audio(file_path, selected_info):
+    try:
+        # Extraindo informações do dicionário
+        contributors = selected_info.get('contributors', '')
+        contributors_less_main = selected_info.get('contributors_less_main', '')
+        artist = selected_info.get('artist', '')
+        title = selected_info.get('title', '')
+        track_number = selected_info.get('track_number', '')
+        album_tracks = selected_info.get('album_tracks', '')
+
+        # Transformando a lista de contribuidores em uma lista
+        contributors = contributors.split(', ')
+
+        if len(album_tracks) > 1 and len(contributors) > 1:
+            # Cria o novo nome do arquivo com base no número da faixa, nome do artista, título da música e colaboradores
+            new_file_name = f"{track_number}. {artist} - {title} feat. {contributors_less_main}.mp3"
+        elif len(album_tracks) == 1 and len(contributors) > 1:
+            # Cria o novo nome do arquivo com base no  nome do artista, título da música e colaboradores
+            new_file_name = f"{artist} - {title} feat. {contributors_less_main}.mp3"
+        elif len(album_tracks) > 1 and len(contributors) == 1:
+            # Cria o novo nome do arquivo com base no número da faixa, nome do artista e título da música
+            new_file_name = f"{track_number}. {artist} - {title}.mp3"
+        else:
+            # O else cobre o caso em que tanto album_tracks quanto contributors são == 1 (len(album_tracks) == 1 and len(contributors) == 1)
+            # Cria o novo nome do arquivo com base no artista e no título
+            new_file_name = f"{artist} - {title}.mp3"
+
         dir_name = os.path.dirname(file_path)
         new_file_path = os.path.join(dir_name, new_file_name)
         # Renomeia o arquivo original para o novo nome
         os.rename(file_path, new_file_path)
-    else:
-        # Cria o novo nome do arquivo com base no artista e no título
-        new_file_name = f"{artist} - {title}.mp3"
-        dir_name = os.path.dirname(file_path)
-        new_file_path = os.path.join(dir_name, new_file_name)
-        # Renomeia o arquivo original para o novo nome
-        os.rename(file_path, new_file_path)
-    return new_file_path
+        return new_file_path
+    except Exception as e:
+        print(f"Erro ao renomear o arquivo MP3: {e}")
 
 def subtract_string(file_path):
     home_dir = os.environ['HOME']
@@ -205,22 +231,23 @@ def update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_na
             selected_info = display_info(info)
             if selected_info is None:
                 print("\nConforme solicitado, o arquivo foi mantido como está.")
-            else:
-                update_mp3_tags_audio(file_path, selected_info)
-                add_cover_art_audio(file_path, selected_info.get('cover_url'))
-                new_file_name = rename_file_audio(file_path, selected_info.get('artist', ''), selected_info.get('title', ''), selected_info.get('track_number', ''), selected_info.get('album_tracks', ''))
+                return
+            update_mp3_tags_audio(file_path, selected_info)
+            add_cover_art_audio(file_path, selected_info.get('cover_url'))
+            new_file_name = rename_file_audio(file_path, selected_info)
+            if new_file_name:
                 print(f"Arquivo renomeado para {subtract_string(new_file_name)}")
         else:
             print("Não foi possível obter informações sobre a música.")
 
 def update_tags_artist_tracktitle_audio():
-    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (responda com 's' para sim ou 'n' para não): ").lower()
+    choice = input("\nVocê deseja atualizar os metatados de um arquivo MP3 do diretório padrão? (Responda com 's' para sim ou 'n' para não): ").lower()
     if choice == 's':
         output_path = output_dir_create('mp3') # Diretório onde os arquivos serão salvos e pesquisados
         file_name_with_extension = input("\nDigite o título do arquivo com a extensão .mp3: ")
         update_tags_for_downloaded_file_artist_tracktitle_audio(output_path, file_name_with_extension)
     elif choice == 'n':
-        output_path= input("\nInforme o caminho do diretório onde está o arquivo MP3 (exemplo: /home/seuusuario/Downloads/): ")
+        output_path= input("\nInforme o caminho do diretório onde está o arquivo MP3 (Exemplo: /home/seuusuario/Downloads/): ")
         if not is_valid_directory(output_path):
             print(f"\nO caminho informado para o diretório é inválido.")
             while not is_valid_directory(output_path):
