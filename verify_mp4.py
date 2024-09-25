@@ -1,6 +1,6 @@
 import subprocess
 import os
-from update_tags_artist_tracktitle import subtract_string, is_valid_directory
+from update_tags_artist_tracktitle import is_valid_directory
 from output_dir import output_dir_create
 
 def get_mp4_info(output_path, file_name_with_extension):
