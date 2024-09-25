@@ -11,15 +11,15 @@ from update_tags_all_mp3 import update_tags_all_mp3_audio
 
 def main_menu():
     while True:
-        print("\n----------------------------------------------------------------------------v1.3")
+        print("\n----------------------------------------------------------------------------v1.4")
         print("Menu:")
         print("1. Baixar música ou playlist do YouTube com atualização de metadados pelo Deezer")
         print("2. Baixar música do YouTube")
         print("3. Baixar vídeo do YouTube")
         print("4. Baixar playlist de músicas do YouTube")
         print("5. Baixar playlist de vídeos do YouTube")
-        print("6. Verificar qualidade da música baixada do YouTube")
-        print("7. Verificar qualidade do vídeo baixado do YouTube")
+        print("6. Verificar a qualidade de um arquivo MP3")
+        print("7. Verificar a qualidade de um arquivo MP4")
         print("8. Atualizar metadados pelo Deezer com base na URL da música")
         print("9. Atualizar metadados pelo Deezer com base no nome do artista e título da música")
         print("10. Atualizar metadados de todos os arquivos MP3 do diretório pelo Deezer")
@@ -46,7 +46,7 @@ def main_menu():
             verify_audio()
 
         elif choice == '7':
-            verify_video()    
+            verify_video()
 
         elif choice == '8':
             update_tags_url_audio()
