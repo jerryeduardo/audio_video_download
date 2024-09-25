@@ -48,7 +48,6 @@ def get_mp4_info(output_path, file_name_with_extension):
             print(f"Taxa de bits: {bit_rate_kbps / 1000:.2f} Mbps")
         else:
             print(f"\nO arquivo {(file_name_with_extension)} não existe.")
-    
     except Exception as e:
         print(f"Erro ao executar o ffprobe: {e}")
 

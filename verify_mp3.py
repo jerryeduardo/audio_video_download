@@ -26,7 +26,6 @@ def get_mp3_info(output_path, file_name_with_extension):
             print(f"Taxa de bits: {bit_rate / 1000:.0f} kbps")
         else:
             print(f"\nO arquivo {(file_name_with_extension)} não existe.")
-    
     except Exception as e:
         print(f"Erro ao executar o ffprobe: {e}")
 
